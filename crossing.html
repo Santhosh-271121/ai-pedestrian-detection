@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Crossing AI</title>
+
+<style>
+
+/* 🌈 BACKGROUND */
+body {
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:linear-gradient(135deg,#e0f7fa,#80deea,#26c6da);
+    color:#111;
+}
+
+/* HEADER */
+#header {
+    text-align:center;
+    padding:12px;
+    font-size:26px;
+    font-weight:bold;
+}
+
+/* LAYOUT */
+#main {
+    display:flex;
+    height:calc(100vh - 60px);
+}
+
+/* 🚦 LEFT */
+#left {
+    width:10%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+}
+
+.light {
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#333;
+}
+
+.red { background:red; box-shadow:0 0 20px red; }
+.yellow { background:orange; box-shadow:0 0 20px orange; }
+.green { background:lime; box-shadow:0 0 20px lime; }
+
+/* 🎥 CENTER (🔥 BIG CAMERA) */
+#center {
+    width:75%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+/* 🚀 BIG CAMERA FIX */
+#camera img {
+    width:100%;
+    height:80vh;       /* 🔥 MAIN FIX */
+    object-fit:cover;
+    border-radius:20px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.4);
+}
+
+/* MESSAGE */
+#message {
+    font-size:34px;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.safe { color:green; }
+.danger { color:red; }
+.wait { color:orange; }
+
+/* DISTANCE */
+#distance {
+    font-size:18px;
+}
+
+/* 📊 CIRCLE */
+#circle {
+    margin-top:10px;
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:6px solid #004d40;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    background:white;
+}
+
+/* 📡 RIGHT */
+#right {
+    width:15%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+}
+
+/* RADAR */
+#radar {
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    border:3px solid #00796b;
+    position:relative;
+}
+
+#scan {
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-top:3px solid #00796b;
+    border-radius:50%;
+    animation:spin 2s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform:rotate(360deg); }
+}
+
+.dot {
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#00796b;
+    border-radius:50%;
+}
+
+/* 🤖 JARVIS */
+#jarvis {
+    background:#004d40;
+    color:#e0f7fa;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    width:90%;
+}
+
+/* BUTTON */
+#voiceToggle {
+    padding:8px;
+    border:none;
+    border-radius:10px;
+    background:#26c6da;
+    cursor:pointer;
+}
+
+/* 📢 TICKER */
+#ticker {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:#004d40;
+    color:white;
+    padding:8px;
+    overflow:hidden;
+}
+
+#ticker span {
+    display:inline-block;
+    padding-left:100%;
+    animation:scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+    100% { transform:translateX(-100%); }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="header">🚶 Smart Crossing AI</div>
+
+<div id="main">
+
+<!-- LEFT -->
+<div id="left">
+<div id="red" class="light"></div>
+<div id="yellow" class="light"></div>
+<div id="green" class="light"></div>
+</div>
+
+<!-- CENTER -->
+<div id="center">
+
+<div id="camera">
+<img src="/video">
+</div>
+
+<div id="message" class="safe">SAFE</div>
+<div id="distance">Distance: -- m</div>
+<div id="circle">20%</div>
+
+</div>
+
+<!-- RIGHT -->
+<div id="right">
+
+<div id="radar">
+<div id="scan"></div>
+</div>
+
+<div id="jarvis">System Ready</div>
+<button id="voiceToggle">🔊 Voice ON</button>
+
+</div>
+
+</div>
+
+<div id="ticker"><span id="tickerText">System ready...</span></div>
+
+<script>
+
+/* 🔥 ENABLE AUDIO */
+document.body.addEventListener("click", ()=>{
+    speechSynthesis.resume();
+});
+
+/* 🎤 SMART VOICE */
+let voiceEnabled = true;
+let lastMessage = "";
+let lastSpeakTime = 0;
+
+function speakSmart(text){
+
+    if(!voiceEnabled) return;
+
+    let now = Date.now();
+
+    if(text !== lastMessage || (now - lastSpeakTime > 4000)){
+
+        speechSynthesis.cancel();
+
+        let msg = new SpeechSynthesisUtterance(text);
+        msg.rate = 0.95;
+
+        speechSynthesis.speak(msg);
+
+        lastMessage = text;
+        lastSpeakTime = now;
+    }
+}
+
+/* TOGGLE */
+document.getElementById("voiceToggle").onclick = ()=>{
+    voiceEnabled = !voiceEnabled;
+    speechSynthesis.cancel();
+
+    document.getElementById("voiceToggle").innerText =
+        voiceEnabled ? "🔊 Voice ON" : "🔇 Voice OFF";
+};
+
+/* LOOP */
+setInterval(()=>{
+
+fetch('/data')
+.then(res=>res.json())
+.then(data=>{
+
+let status=data.status;
+let msg=data.message;
+let dist=data.distance;
+let objects=data.objects || [];
+
+document.getElementById("message").innerText=msg;
+document.getElementById("distance").innerText="Distance: "+dist+" m";
+
+/* SIGNAL */
+let r=document.getElementById("red");
+let y=document.getElementById("yellow");
+let g=document.getElementById("green");
+
+r.className="light";
+y.className="light";
+g.className="light";
+
+let percent=20;
+
+if(status=="DANGER"){
+    r.classList.add("red");
+    percent=100;
+    document.getElementById("message").className="danger";
+}
+else if(status=="MODERATE"){
+    y.classList.add("yellow");
+    percent=60;
+    document.getElementById("message").className="wait";
+}
+else{
+    g.classList.add("green");
+    percent=20;
+    document.getElementById("message").className="safe";
+}
+
+document.getElementById("circle").innerText=percent+"%";
+
+/* RADAR */
+let radar=document.getElementById("radar");
+document.querySelectorAll(".dot").forEach(e=>e.remove());
+
+objects.forEach(()=>{
+    let dot=document.createElement("div");
+    dot.className="dot";
+    dot.style.left=(Math.random()*140)+"px";
+    dot.style.top=(Math.random()*140)+"px";
+    radar.appendChild(dot);
+});
+
+/* TEXT */
+document.getElementById("jarvis").innerText = msg;
+document.getElementById("tickerText").innerText = msg;
+
+/* 🔊 VOICE */
+let voiceText = "";
+
+if(status=="DANGER"){
+    voiceText = "Warning. Vehicle approaching. Do not cross.";
+}
+else if(status=="MODERATE"){
+    voiceText = "Vehicle detected. Please wait.";
+}
+else{
+    voiceText = "Safe to cross.";
+}
+
+speakSmart(voiceText);
+
+});
+
+},1000);
+
+</script>
+
+</body>
+</html>

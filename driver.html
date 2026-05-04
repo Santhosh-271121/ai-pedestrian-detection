@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Driver AI - Vibrant JARVIS</title>
+
+<style>
+
+/* 🌈 VIBRANT BACKGROUND */
+body {
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:linear-gradient(135deg,#43cea2,#185a9d);
+    color:#111;
+}
+
+/* GRID */
+#container {
+    display:grid;
+    grid-template-columns: 300px 1fr 320px;
+    height:100vh;
+    gap:15px;
+    padding:15px;
+}
+
+/* 🌈 COLORFUL CARDS */
+.card {
+    border-radius:16px;
+    padding:15px;
+    color:white;
+    transition:0.3s;
+}
+
+/* LEFT COLORS */
+#left .card:nth-child(1){ background:linear-gradient(135deg,#7b2ff7,#f107a3); }
+#left .card:nth-child(2){ background:linear-gradient(135deg,#ff6a00,#ee0979); }
+#left .card:nth-child(3){ background:linear-gradient(135deg,#f7971e,#ffd200); color:#000; }
+#left .card:nth-child(4){ background:linear-gradient(135deg,#00c6ff,#0072ff); }
+#left .card:nth-child(5){ background:linear-gradient(135deg,#43e97b,#38f9d7); color:#000; }
+#left .card:nth-child(6){ background:linear-gradient(135deg,#667eea,#764ba2); }
+
+/* RIGHT COLORS */
+#right .card:nth-child(2){ background:linear-gradient(135deg,#ff9966,#ff5e62); }
+#right .card:nth-child(3){ background:linear-gradient(135deg,#56ccf2,#2f80ed); }
+#right .card:nth-child(4){ background:linear-gradient(135deg,#f953c6,#b91d73); }
+
+/* HOVER */
+.card:hover {
+    transform:translateY(-5px) scale(1.02);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* TEXT */
+.title { font-size:12px; opacity:0.8; }
+.value { font-size:22px; font-weight:bold; }
+
+/* LEFT */
+#left {
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+/* CAMERA */
+#camera img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+/* RIGHT */
+#right {
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+/* 🚨 ALERT */
+#alert {
+    font-size:26px;
+    font-weight:bold;
+    text-align:center;
+    padding:12px;
+    border-radius:14px;
+    color:white;
+}
+
+.safe { background:#22c55e; }
+.warning { background:#facc15; color:#000; }
+.danger {
+    background:#ef4444;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse {
+    50% { transform:scale(1.05); }
+}
+
+/* 📊 BAR */
+#barContainer {
+    height:14px;
+    background:#eee;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+#bar {
+    height:100%;
+    width:20%;
+    border-radius:10px;
+}
+
+/* 🤖 JARVIS PANEL */
+#jarvis {
+    background:black;
+    color:#00ffff;
+    border-radius:12px;
+    padding:12px;
+    min-height:80px;
+    font-size:14px;
+}
+
+/* SPEAK ANIMATION */
+.speaking {
+    animation:glow 0.6s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow:0 0 5px cyan; }
+    to { box-shadow:0 0 20px cyan; }
+}
+
+/* BUTTON */
+#voiceToggle {
+    margin-top:10px;
+    padding:8px;
+    border:none;
+    border-radius:10px;
+    background:#00ffff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+<!-- LEFT -->
+<div id="left">
+
+<div class="card">
+<div class="title">Detected Object</div>
+<div id="obj" class="value">None</div>
+</div>
+
+<div class="card">
+<div class="title">Distance</div>
+<div id="dist" class="value">-- m</div>
+</div>
+
+<div class="card">
+<div class="title">Nearby Objects</div>
+<div id="multiList"></div>
+</div>
+
+<div class="card">
+<div class="title">AI Suggestion</div>
+<div id="ai">Waiting...</div>
+</div>
+
+<div class="card">
+<div class="title">Summary</div>
+<div id="summary"></div>
+</div>
+
+<div class="card">
+<div class="title">Direction</div>
+<div id="direction"></div>
+</div>
+
+</div>
+
+<!-- CAMERA -->
+<div id="camera">
+<img src="/video">
+</div>
+
+<!-- RIGHT -->
+<div id="right">
+
+<div id="alert" class="safe">SAFE</div>
+
+<div class="card">
+<div class="title">Risk Level</div>
+<div id="barContainer">
+<div id="bar"></div>
+</div>
+</div>
+
+<div class="card">
+<div class="title">🤖 AI Assistant</div>
+<div id="jarvis">System Ready...</div>
+<button id="voiceToggle">🔊 Voice ON</button>
+</div>
+
+<div class="card">
+<div class="title">Time</div>
+<div id="time"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let voiceEnabled = true;
+let lastSpoken = "";
+
+/* 🎤 SPEAK */
+function speak(text){
+
+    if(!voiceEnabled) return;
+    if(text === lastSpoken) return;
+
+    let msg = new SpeechSynthesisUtterance(text);
+    msg.rate = 1;
+    speechSynthesis.speak(msg);
+
+    lastSpoken = text;
+
+    let jarvis = document.getElementById("jarvis");
+    jarvis.classList.add("speaking");
+    setTimeout(()=>jarvis.classList.remove("speaking"),1200);
+}
+
+/* TOGGLE */
+document.getElementById("voiceToggle").onclick = ()=>{
+    voiceEnabled = !voiceEnabled;
+    document.getElementById("voiceToggle").innerText =
+        voiceEnabled ? "🔊 Voice ON" : "🔇 Voice OFF";
+};
+
+setInterval(()=>{
+
+fetch('/alert')
+.then(res=>res.json())
+.then(data=>{
+
+// BASIC
+document.getElementById("obj").innerText=data.object;
+document.getElementById("dist").innerText=data.distance+" m";
+document.getElementById("ai").innerText=data.suggestion;
+document.getElementById("time").innerText=new Date().toLocaleTimeString();
+
+// LIST
+let list="";
+if(data.objects){
+    data.objects.forEach(o=>{
+        list+=`${o.name} - ${o.distance}m<br>`;
+    });
+}
+document.getElementById("multiList").innerHTML=list;
+
+// SUMMARY
+document.getElementById("summary").innerHTML =
+`👥 ${data.total_objects} | 🚗 ${data.vehicles} | 🚶 ${data.persons}`;
+
+// DIRECTION
+document.getElementById("direction").innerText = data.direction;
+
+// ALERT
+let alert=document.getElementById("alert");
+let bar=document.getElementById("bar");
+
+if(data.alert.includes("🚨")){
+    alert.className="danger";
+    bar.style.width="100%";
+    bar.style.background="red";
+}
+else if(data.alert.includes("⚠️")){
+    alert.className="warning";
+    bar.style.width="60%";
+    bar.style.background="orange";
+}
+else{
+    alert.className="safe";
+    bar.style.width="20%";
+    bar.style.background="lime";
+}
+
+alert.innerText=data.alert;
+
+// JARVIS TEXT
+let msg = data.alert + ". " + data.suggestion;
+document.getElementById("jarvis").innerText = msg;
+
+// VOICE
+if(data.alert.includes("🚨")){
+    speak("Warning! " + data.suggestion);
+}
+else if(data.alert.includes("⚠️")){
+    speak("Attention. " + data.suggestion);
+}
+else{
+    speak("System stable. All clear.");
+}
+
+});
+
+},1000);
+
+</script>
+
+</body>
+</html>
