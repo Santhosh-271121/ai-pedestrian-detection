@@ -66,15 +66,15 @@ The project combines **YOLOv8**, **OpenCV**, and **Flask** to process live video
 ## 🚗 Driver Side Detection
 
 <p align="center">
-<img src="image1%20(1).png" width="900">
+  <img src="driver_view.png" alt="Driver Side Detection" width="900">
 </p>
 
 ---
 
-## 🚶 Crossing Side Detection
+## 🚶 Pedestrian Crossing Detection
 
 <p align="center">
-<img src="image2.png" width="900">
+  <img src="crossing_view.png" alt="Crossing Side Detection" width="900">
 </p>
 
 ---
