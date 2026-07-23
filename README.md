@@ -3,57 +3,61 @@
 <p align="center">
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![YOLOv8](https://img.shields.io/badge/YOLOv8-FF6F00?style=for-the-badge)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask)
 ![HTML5](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
+</p>
+
+<p align="center">
+<b>Real-Time AI-Based Pedestrian Detection & Driver Safety System using YOLOv8 and Computer Vision</b>
 </p>
 
 ---
 
-# 📌 Project Overview
+# 📌 Overview
 
-The **AI-Based Pedestrian Safety System** is a real-time computer vision application that detects pedestrians and helps improve road safety by providing alerts to drivers and monitoring pedestrian crossings.
+The **AI-Based Pedestrian Safety System** is a real-time computer vision application that detects pedestrians using **YOLOv8** and helps improve road safety by providing alerts to drivers and monitoring pedestrian crossings.
 
-Using **OpenCV** for pedestrian detection and **Flask** for the web interface, the system analyzes live video streams and highlights pedestrians with bounding boxes to assist in accident prevention.
-
----
-
-# ✨ Key Features
-
-- 🚶 Real-time Pedestrian Detection
-- 🎥 Live Camera Monitoring
-- 🚗 Driver-Side Safety Alerts
-- 🚦 Pedestrian Crossing Monitoring
-- 📦 Bounding Box Detection
-- 🖥 Flask-based Web Interface
-- ⚡ Fast Detection using OpenCV
-- 📹 Supports Webcam and Video Files
+The project combines **YOLOv8**, **OpenCV**, and **Flask** to process live video streams, detect pedestrians, and visualize detection results through a web interface.
 
 ---
 
-# 🛠️ Technologies Used
+# ✨ Features
+
+- 🚶 Real-Time Pedestrian Detection
+- 🚗 Driver Safety Monitoring
+- 🚦 Pedestrian Crossing Detection
+- 🎥 Live Camera Support
+- 📦 YOLOv8 Object Detection
+- 🟢 Bounding Box Visualization
+- 🌐 Flask Web Interface
+- ⚡ Fast Detection Performance
+
+---
+
+# 🛠 Technologies Used
 
 | Technology | Purpose |
 |------------|---------|
-| Python | Core Programming |
-| OpenCV | Pedestrian Detection |
+| Python | Programming Language |
+| YOLOv8 | AI Object Detection |
+| OpenCV | Image Processing |
 | Flask | Web Application |
 | HTML | User Interface |
 | CSS | Styling |
 
 ---
 
-# ⚙️ System Workflow
+# ⚙️ Project Workflow
 
-1. Capture video from the webcam or video file.
-2. Preprocess each frame using OpenCV.
-3. Detect pedestrians in real time.
-4. Draw bounding boxes around detected pedestrians.
-5. Monitor driver-side and crossing-side activity.
-6. Display live detection results.
-7. Generate alerts when pedestrians are detected nearby.
+1. Capture live video from webcam.
+2. Load YOLOv8 model.
+3. Detect pedestrians in every frame.
+4. Draw bounding boxes around detected persons.
+5. Display driver-side and crossing-side monitoring.
+6. Generate visual safety alerts.
 
 ---
 
@@ -62,32 +66,38 @@ Using **OpenCV** for pedestrian detection and **Flask** for the web interface, t
 ## 🚗 Driver Side Detection
 
 <p align="center">
-<img src="Images/driver_view.png" alt="Driver Side Detection" width="900">
+<img src="image1%20(1).png" width="900">
 </p>
 
 ---
 
-## 🚶 Pedestrian Crossing Detection
+## 🚶 Crossing Side Detection
 
 <p align="center">
-<img src="Images/crossing_view.png" alt="Crossing Side Detection" width="900">
+<img src="image2.png" width="900">
 </p>
 
 ---
 
-# 📂 Folder Structure
+# 📂 Project Structure
 
 ```text
 AI-Based-Pedestrian-Safety-System/
 │
-├── Images/
-│   ├── driver_view.png
-│   └── crossing_view.png
+├── templates/
+│   ├── driver.html
+│   └── crossing.html
 │
 ├── driver_app.py
 ├── crossing_app.py
-├── driver.html
-├── crossing.html
+├── test.py
+│
+├── yolov8n.pt
+├── yolov8m.pt
+├── yolov8l.pt
+│
+├── image1 (1).png
+├── image2.png
 │
 ├── README.md
 ├── requirements.txt
@@ -97,33 +107,33 @@ AI-Based-Pedestrian-Safety-System/
 
 ---
 
-# 🚀 Getting Started
+# 🚀 Installation
 
-## Clone the Repository
+Clone the repository
 
 ```bash
 git clone https://github.com/Santhosh-271121/ai-pedestrian-detection.git
 ```
 
-## Navigate to the Project
+Navigate to the project
 
 ```bash
 cd ai-pedestrian-detection
 ```
 
-## Install Dependencies
+Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run Driver Side Module
+Run Driver Side
 
 ```bash
 python driver_app.py
 ```
 
-## Run Pedestrian Crossing Module
+Run Crossing Side
 
 ```bash
 python crossing_app.py
@@ -135,22 +145,21 @@ python crossing_app.py
 
 - 🚗 Advanced Driver Assistance Systems (ADAS)
 - 🚦 Smart Traffic Management
-- 🚶 Pedestrian Safety Monitoring
+- 🚶 Pedestrian Safety
 - 🏙 Smart City Solutions
 - 🚑 Accident Prevention
-- 🎥 Intelligent Surveillance Systems
+- 🎥 Intelligent Surveillance
 
 ---
 
-# 🔮 Future Enhancements
+# 🔮 Future Improvements
 
-- YOLOv8-based Pedestrian Detection
 - Distance Estimation
-- Speed Detection
-- Email & SMS Alert System
-- Multi-Camera Monitoring
-- Cloud-Based Dashboard
-- Deep Learning-Based Detection
+- Speed Estimation
+- Audio Warning System
+- Multi-Camera Support
+- Cloud Dashboard
+- Mobile Application
 
 ---
 
@@ -169,6 +178,6 @@ python crossing_app.py
 
 <p align="center">
 
-⭐ **If you found this project useful, consider giving it a Star!**
+⭐ If you found this project useful, consider giving it a Star!
 
 </p>
